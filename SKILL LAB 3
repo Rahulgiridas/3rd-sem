@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node 
+{
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+struct Node* createNode(int data)
+{
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) 
+{
+        printf("Memory allocation failed.\n");
+        exit(EXIT_FAILURE);
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    return newNode;
+}
+struct Node* insertAtBeginning(struct Node* head, int data)
+{
+    struct Node* newNode = createNode(data);
+    if (head == NULL) 
+{
+        return newNode;
+    }
+    newNode->next = head;
+    head->prev = newNode;
+    return newNode;
+}
+void displayForward(struct Node* head) 
+{
+    printf("Doubly Linked List (Forward): ");
+    while (head != NULL) {
+        printf("%d ", head->data);
+        head = head->next;
+    }
+    printf("\n");
+}
+void displayBackward(struct Node* head)
+{
+    if (head == NULL)
+{
+        printf("Doubly Linked List (Backward): List is empty\n");
+        return;
+    }
+    while (head->next != NULL)
+{
+        head = head->next;
+    }
+    printf("Doubly Linked List (Backward): ");
+    while (head != NULL
+) {
+        printf("%d ", head->data);
+        head = head->prev;
+    }
+    printf("\n");
+}
+void freeList(struct Node* head) 
+{
+    struct Node* current = head;
+    while (head != NULL)
+{
+        current = head;
+        head = head->next;
+        free(current);
+    }
+}
+int main() 
+{
+    struct Node* head = NULL;
+    head = insertAtBeginning(head, 30);
+    head = insertAtBeginning(head, 20);
+    head = insertAtBeginning(head, 10);
+    displayForward(head);
+    displayBackward(head);
+    freeList(head);
+    return 0;
+}
