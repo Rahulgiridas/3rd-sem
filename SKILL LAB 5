@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_SIZE 100
+struct Stack
+{
+    int items[MAX_SIZE];
+    int top;
+};
+void initializeStack(struct Stack* stack) {
+    stack->top = -1;
+}
+int isEmpty(struct Stack* stack)
+{
+    return stack->top == -1;
+}
+int isFull(struct Stack* stack)
+{
+    return stack->top == MAX_SIZE - 1;
+}
+void push(struct Stack* stack, int item)
+{
+    if (isFull(stack))
+    {
+        printf("Stack overflow. Cannot push more items.\n");
+        return;
+    }
+    stack->items[++stack->top] = item;
+}
+int pop(struct Stack* stack)
+{
+    if (isEmpty(stack))
+    {
+        printf("Stack underflow. Cannot pop from an empty stack.\n");
+        return -1; 
+    }
+    return stack->items[stack->top--];
+}
+void undo(struct Stack* undoStack)
+{
+    int lastAction = pop(undoStack);
+    if (lastAction != -1)
+    {
+        printf("Undoing action: %d\n", lastAction);     
+    }
+}
+void typeCharacter(struct Stack* undoStack, char character) 
+{
+    printf("Typing character: %c\n", character);
+    push(undoStack, character);
+}
+int main() 
+{
+    struct Stack undoStack;
+    initializeStack(&undoStack);
+    typeCharacter(&undoStack, 'H');
+    typeCharacter(&undoStack, 'e');
+    typeCharacter(&undoStack, 'l');
+    typeCharacter(&undoStack, 'l');
+    typeCharacter(&undoStack, 'o');
+    undo(&undoStack); 
+    undo(&undoStack); 
+    undo(&undoStack); 
+    undo(&undoStack); 
+    undo(&undoStack); 
+    undo(&undoStack); 
+    return 0;
+}
