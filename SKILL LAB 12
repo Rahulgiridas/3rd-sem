@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define ALPHABET_SIZE 26
+struct TrieNode
+{
+    struct TrieNode* children[ALPHABET_SIZE];
+    int isEndOfWord; 
+};
+struct TrieNode* createNode() 
+{
+    struct TrieNode* node = (struct TrieNode*)malloc(sizeof(struct TrieNode));
+    if (node) 
+{
+        int i;
+        for (i = 0; i < ALPHABET_SIZE; i++)
+{
+            node->children[i] = NULL;
+        }
+        node->isEndOfWord = 0;
+    }
+    return node;
+}
+void insert(struct TrieNode* root, const char* key)
+{
+    struct TrieNode* currentNode = root;
+    int level;
+    int length = strlen(key);
+    for (level = 0; level < length; level++) 
+{
+        int index = key[level] - 'a'; 
+        if (!currentNode->children[index])
+{
+            currentNode->children[index] = createNode();
+        }
+        currentNode = currentNode->children[index];
+    }
+    currentNode->isEndOfWord = 1;
+}
+int search(struct TrieNode* root, const char* key)
+{
+    struct TrieNode* currentNode = root;
+    int level;
+    int length = strlen(key);
+    for (level = 0; level < length; level++) 
+{
+        int index = key[level] - 'a';
+
+        if (!currentNode->children[index]) 
+{
+            return 0;
+        }
+        currentNode = currentNode->children[index];
+    }
+    return (currentNode != NULL && currentNode->isEndOfWord);
+}
+int main()
+{
+    struct TrieNode* root = createNode();
+    insert(root, "hear");
+    insert(root, "heart");
+    insert(root, "hen");
+    insert(root, "heap");
+    insert(root, "trim");
+    insert(root, "tree");
+    printf("Search for 'hear': %s\n", search(root, "hear") ? "Found" : "Not Found");
+    printf("Search for 'trim': %s\n", search(root, "trim") ? "Found" : "Not Found");
+    printf("Search for 'orange': %s\n", search(root, "orange") ? "Found" : "Not Found");
+
+    return 0;
+}
